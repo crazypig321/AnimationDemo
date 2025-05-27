@@ -7,7 +7,7 @@
 * 点击动效使用方法：.clickEffect(animationStyle.animationStyle.isClick())
  */
 
-import {  curves, PersistenceV2 } from "@kit.ArkUI"
+import { AppStorageV2, curves, PersistenceV2 } from "@kit.ArkUI"
 
 //通用动画参数
 let animationUtils: AnimateParam
@@ -143,6 +143,7 @@ export class AnimationStyle{
     return clickEffect
   }
 
+
 }
 
-export const animationStyle: AnimationStyle = PersistenceV2.connect(AnimationStyle, () => new AnimationStyle())!;
+export const animationStyle: AnimationStyle = AppStorageV2.connect(AnimationStyle , () => new AnimationStyle())!;

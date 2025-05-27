@@ -1,11 +1,29 @@
 import { animationStyle,  } from '../utils/Animation';
+import {
+  ItemRestriction,
+  PersistenceV2, SegmentButton, SegmentButtonItemTuple, SegmentButtonOptions,
+  SegmentButtonTextItem } from '@kit.ArkUI';
+import { saveUI } from '../utils/PersistenceV2';
 
 @Entry
-@ComponentV2
+@Component
 struct Index {
-  @Local message: string = 'Hello World';
+  @State message: string = 'Hello World';
+  @State tabOptions: SegmentButtonOptions = SegmentButtonOptions.tab({
+    buttons: [{ text: '蓝色' }, { text: '红色' }, {
+      text: '绿色'
+    }] as ItemRestriction<SegmentButtonTextItem>,
+    backgroundBlurStyle: BlurStyle.BACKGROUND_THICK
+  })
+  @State tabSelectedIndexes: number[] = [0]
+
+  aboutToAppear(): void {
+    this.tabSelectedIndexes = saveUI.tabSelectedIndexes
+    console.info('PersistenceV2 Keys:',JSON.stringify(PersistenceV2.keys()))
+  }
 
   build() {
+    Stack(){
     Row() {
       Column({ space: 20 }){
         if (animationStyle.isShow){
@@ -14,7 +32,7 @@ struct Index {
               ListItem(){
                 Text(s)
                   .fontSize(12)
-                  .fontColor(Color.Orange)
+                  .fontColor(saveUI.themeColor)
               }
               .height(30)
               .backgroundColor('#ffffffff')
@@ -34,13 +52,13 @@ struct Index {
           .translate({ y: animationStyle.translateY })
           .scale({x: animationStyle.scaleSize, y: animationStyle.scaleSize})
           .padding(10)
-          .fontColor(Color.Green)
+          .fontColor(Color.White)
       }
       .justifyContent(FlexAlign.Center)
       .height(animationStyle.heightRow)
-      .backgroundColor('#ffb5d6e3')
+      .backgroundColor(saveUI.themeColor)
       .borderRadius(20)
-      .onClick(() => {
+      .onClick(async () => {
         animationStyle.shareAnim()
       })
       .transition(animationStyle.isScale())
@@ -50,5 +68,26 @@ struct Index {
     .width('100%')
     .alignItems(VerticalAlign.Top)
     .justifyContent(animationStyle.flexAlign)
+
+      SegmentButton({
+        options: this.tabOptions,
+        selectedIndexes: $tabSelectedIndexes,
+        onItemClicked: (i: number)=>{
+          this.tabSelectedIndexes = [i]
+          saveUI.tabSelectedIndexes = [i]
+          if (i == 0) {
+            saveUI.themeColor = Color.Blue
+          }else if (i == 1) {
+            saveUI.themeColor = Color.Red
+          }
+          else if (i == 2) {
+            saveUI.themeColor = Color.Green
+          }
+        }
+      })
+        .position({ y:'90%' })
+  }
+    .height('100%')
+    .width('100%')
   }
 }
