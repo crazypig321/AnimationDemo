@@ -7,7 +7,7 @@
 * 点击动效使用方法：.clickEffect(animationStyle.animationStyle.isClick())
  */
 
-import { AppStorageV2, curves } from "@kit.ArkUI"
+import {  curves, PersistenceV2 } from "@kit.ArkUI"
 
 //通用动画参数
 let animationUtils: AnimateParam
@@ -15,7 +15,7 @@ let transitionEffect: TransitionEffect
 let clickEffect: ClickEffect
 
 @ObservedV2
-class AnimationStyle{
+export class AnimationStyle{
   @Trace i?: number | string | FlexAlign | undefined
   @Trace translateY: number = 0
   @Trace scaleSize: number = 1
@@ -128,7 +128,7 @@ class AnimationStyle{
 
         TransitionEffect.OPACITY
           .combine(TransitionEffect.rotate({ x: 1, angle: 270, perspective: 50 }))
-          .combine(TransitionEffect.scale({ x:0, y:0 }))
+          .combine(TransitionEffect.scale({ x: 0, y: 0, centerX:0, centerY: 0 }))
           .animation(this.animNormalMinusUtils(d))
       )
     return transitionEffect
@@ -145,4 +145,4 @@ class AnimationStyle{
 
 }
 
-export const animationStyle: AnimationStyle = AppStorageV2.connect(AnimationStyle, () => new AnimationStyle())!
+export const animationStyle: AnimationStyle = PersistenceV2.connect(AnimationStyle, () => new AnimationStyle())!;

@@ -1,5 +1,4 @@
-import { animationStyle } from '../utils/Animation';
-
+import { animationStyle,  } from '../utils/Animation';
 
 @Entry
 @ComponentV2
@@ -24,7 +23,6 @@ struct Index {
               .width('90%')
             })
           }
-        //  .height(this.heightRow)
           .width('100%')
           .alignListItem(ListItemAlign.Center)
         }
@@ -35,18 +33,18 @@ struct Index {
           .fontWeight(FontWeight.Bold)
           .translate({ y: animationStyle.translateY })
           .scale({x: animationStyle.scaleSize, y: animationStyle.scaleSize})
-            // .clickEffect(animationStyle.isClick())
-          .transition(animationStyle.isScale())
           .padding(10)
-          .fontColor(Color.White)
+          .fontColor(Color.Green)
       }
       .justifyContent(FlexAlign.Center)
       .height(animationStyle.heightRow)
       .backgroundColor('#ffb5d6e3')
       .borderRadius(20)
       .onClick(() => {
-          animationStyle.shareAnim()
+        animationStyle.shareAnim()
       })
+      .transition(animationStyle.isScale())
+      .clickEffect(animationStyle.isClick())
     }
     .height('100%')
     .width('100%')
