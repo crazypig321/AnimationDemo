@@ -1,29 +1,27 @@
 
 /*
-* @StorageLink ('AnimationStyle') animationStyle: AnimationStyle = new AnimationStyle()
-*
-* 属性动画参数使用方法：.animation(this.animationStyle.animationUtils())
-* 属性变化使用方法：this.animationStyle.attributeAnim(i为属性变化数值)
-* 显示动画参数使用方法：animateTo(this.animationStyle.animationUtils(),()=>{})
-* 转场动画使用方法：.transition(this.animationStyle.isScale())
-* 点击动效使用方法：.clickEffect(this.animationStyle.isClick())
+* 属性动画参数使用方法：.animation(animationStyle.animationStyle.animationUtils())
+* 属性变化使用方法：animationStyle.animationStyle.attributeAnim(i为属性变化数值)
+* 显示动画参数使用方法：animationStyle.animationUtils()
+* 转场动画使用方法：.transition(animationStyle.animationStyle.isScale())
+* 点击动效使用方法：.clickEffect(animationStyle.animationStyle.isClick())
  */
 
-import { curves } from "@kit.ArkUI"
+import { AppStorageV2, curves } from "@kit.ArkUI"
 
 //通用动画参数
 let animationUtils: AnimateParam
 let transitionEffect: TransitionEffect
 let clickEffect: ClickEffect
 
-@Observed
-export class AnimationStyle{
-  i?: number | string | FlexAlign | undefined
-  translateY: number = 0
-  scaleSize: number = 1
-  heightRow: number | string = ''
-  flexAlign: FlexAlign = FlexAlign.Start
-  isShow: boolean = false
+@ObservedV2
+class AnimationStyle{
+  @Trace i?: number | string | FlexAlign | undefined
+  @Trace translateY: number = 0
+  @Trace scaleSize: number = 1
+  @Trace heightRow: number | string = ''
+  @Trace flexAlign: FlexAlign = FlexAlign.Start
+  @Trace isShow: boolean = false
 
   /*通用动画参数*/
   //弹性动画参数
@@ -69,24 +67,28 @@ export class AnimationStyle{
 
   /* 属性动画 */
   public attributeAnim(i: number | string | FlexAlign | undefined){
+    animateTo(this.animSpringUtils(),()=> {
       this.i = i
+    })
   }
 
   ///共享元素动画参数
   public shareAnim(){
-    if (this.translateY == 0 && this.scaleSize == 1 && this.flexAlign == FlexAlign.Start && this.heightRow == '') {
-      this.translateY = 0;
-      this.scaleSize = 1.5;
-      this.flexAlign = FlexAlign.Center;
-      this.heightRow = '50%';
-      this.isShow = true;
-    }else {
-      this.translateY = 0;
-      this.scaleSize = 1;
-      this.flexAlign = FlexAlign.Start;
-      this.heightRow = '';
-      this.isShow = false
-    }
+    animateTo(this.animSpringUtils(),()=>{
+      if (this.translateY == 0 && this.scaleSize == 1 && this.flexAlign == FlexAlign.Start && this.heightRow == '') {
+        this.translateY = 0;
+        this.scaleSize = 1.5;
+        this.flexAlign = FlexAlign.Center;
+        this.heightRow = '50%';
+        this.isShow = true;
+      }else {
+        this.translateY = 0;
+        this.scaleSize = 1;
+        this.flexAlign = FlexAlign.Start;
+        this.heightRow = '';
+        this.isShow = false
+      }
+    })
   }
 
   /* 转场动画 */
@@ -143,4 +145,4 @@ export class AnimationStyle{
 
 }
 
-
+export const animationStyle: AnimationStyle = AppStorageV2.connect(AnimationStyle, () => new AnimationStyle())!
