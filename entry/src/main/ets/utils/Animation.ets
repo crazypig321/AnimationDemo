@@ -118,6 +118,7 @@ export class AnimationStyle{
     return transitionEffect
   }
 
+  //旋转转场动画（类似百叶窗效果）
   public isRotate(d: number){
     transitionEffect=
       TransitionEffect.asymmetric(
