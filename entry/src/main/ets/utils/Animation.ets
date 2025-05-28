@@ -1,10 +1,9 @@
-
 /*
-* 属性动画参数使用方法：.animation(animationStyle.animationStyle.animationUtils())
-* 属性变化使用方法：animationStyle.animationStyle.attributeAnim(i为属性变化数值)
+* 属性动画参数使用方法：.animation(animationStyle.animationUtils())
+* 属性变化使用方法：animationStyle.attributeAnim(i为属性变化数值)
 * 显示动画参数使用方法：animationStyle.animationUtils()
-* 转场动画使用方法：.transition(animationStyle.animationStyle.isScale())
-* 点击动效使用方法：.clickEffect(animationStyle.animationStyle.isClick())
+* 转场动画使用方法：.transition(animationStyle.isScale())
+* 点击动效使用方法：.clickEffect(animationStyle.isClick())
  */
 
 import { AppStorageV2, curves, PersistenceV2 } from "@kit.ArkUI"
