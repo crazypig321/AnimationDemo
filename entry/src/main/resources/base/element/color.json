@@ -3,6 +3,14 @@
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "settings_switch_button_floor",
+      "value": "#E6E8E9"
+    },
+    {
+      "name": "switch_button",
+      "value": "#FFFFFFFF"
     }
   ]
 }

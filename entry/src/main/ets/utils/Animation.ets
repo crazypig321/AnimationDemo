@@ -6,7 +6,7 @@
 * 点击动效使用方法：.clickEffect(animationStyle.isClick())
  */
 
-import { AppStorageV2, curves, PersistenceV2 } from "@kit.ArkUI"
+import { AppStorageV2, curves, PersistenceV2, window } from "@kit.ArkUI"
 
 //通用动画参数
 let animationUtils: AnimateParam
@@ -21,6 +21,11 @@ export class AnimationStyle{
   @Trace heightRow: number | string = ''
   @Trace flexAlign: FlexAlign = FlexAlign.Start
   @Trace isShow: boolean = false
+
+  ctx?: UIContext
+  setContext(context: UIContext) {
+    this.ctx = context;
+  }
 
   /*通用动画参数*/
   //弹性动画参数
@@ -64,19 +69,41 @@ export class AnimationStyle{
     return animationUtils
   }
 
+  //普通动画参数
+  public animNormalUtils(d: number){
+    animationUtils = {
+      duration: 300,
+      curve: Curve.EaseOut,
+      iterations: 1,
+      playMode: PlayMode.Normal,
+      delay:d
+    }
+    return animationUtils
+  }
+
   /* 属性动画 */
   public attributeAnim(i: number | string | FlexAlign | undefined){
-    animateTo(this.animSpringUtils(),()=> {
+    if (this.ctx)
+      this.ctx.animateTo(this.animSpringUtils(),()=> {
       this.i = i
     })
   }
 
+  //显示动画
+  public AnimTo(use: void, d: number){
+    if (this.ctx)
+      this.ctx.animateTo(this.animNormalUtils(d),()=> {
+        use
+      })
+  }
+
   ///共享元素动画参数
   public shareAnim(){
-    animateTo(this.animSpringUtils(),()=>{
+    if (this.ctx)
+      this.ctx.animateTo(this.animSpringUtils(),()=>{
       if (this.translateY == 0 && this.scaleSize == 1 && this.flexAlign == FlexAlign.Start && this.heightRow == '') {
         this.translateY = 0;
-        this.scaleSize = 1.5;
+        this.scaleSize = 1.45;
         this.flexAlign = FlexAlign.Center;
         this.heightRow = '50%';
         this.isShow = true;
@@ -101,7 +128,7 @@ export class AnimationStyle{
     return transitionEffect
   }
 
-  //移动转场动画
+  //移动转场动画,类似堆叠向下展开效果
   public isMove(d: number){
     transitionEffect=
       TransitionEffect.asymmetric(
@@ -122,12 +149,12 @@ export class AnimationStyle{
     transitionEffect=
       TransitionEffect.asymmetric(
         TransitionEffect.OPACITY
-          .combine(TransitionEffect.rotate({ x: 1, angle: 270, perspective: 20 }))
-          .combine(TransitionEffect.scale({ x:0.7, y:0.7 }))
+          .combine(TransitionEffect.rotate({ x: 1, angle: 180, perspective: 20 }))
+          .combine(TransitionEffect.scale({ x:0.9, y:0.9 }))
           .animation(this.animNormalAddUtils(d)),
 
         TransitionEffect.OPACITY
-          .combine(TransitionEffect.rotate({ x: 1, angle: 270, perspective: 50 }))
+          .combine(TransitionEffect.rotate({ x: 1, angle: 180, perspective: 50 }))
           .combine(TransitionEffect.scale({ x: 0, y: 0, centerX:0, centerY: 0 }))
           .animation(this.animNormalMinusUtils(d))
       )
@@ -146,4 +173,4 @@ export class AnimationStyle{
 
 }
 
-export const animationStyle: AnimationStyle = AppStorageV2.connect(AnimationStyle , () => new AnimationStyle())!;
+export const animationStyle: AnimationStyle = new AnimationStyle();
